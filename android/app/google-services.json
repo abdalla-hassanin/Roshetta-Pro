@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1046911156481",
+    "project_id": "roshetta-pro-app",
+    "storage_bucket": "roshetta-pro-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1046911156481:android:0be07750e5898896609b00",
+        "android_client_info": {
+          "package_name": "com.abdalla.roshetta_pro"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4GtI9ae3Ix0E5SHvZnDEkOXAx5Z6Pitk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

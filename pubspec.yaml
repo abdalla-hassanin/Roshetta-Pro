@@ -1,0 +1,65 @@
+name: roshetta_pro
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.0.5+5
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.6
+  cloud_firestore: ^4.17.0
+  firebase_auth: ^4.19.2
+  firebase_core: ^2.30.0
+  get_it: ^7.7.0
+  flutter_bloc: ^8.1.5
+  iconify_flutter: ^0.0.5
+  url_launcher: ^6.2.6
+  lottie: ^3.1.0
+  image_picker: ^1.1.0
+  firebase_storage: ^11.7.4
+  numberpicker: ^2.1.2
+  full_screen_image_null_safe: ^2.0.0
+  shared_preferences: ^2.2.3
+  flutter_localizations:
+    sdk: flutter
+  intl: ^0.18.1
+  # for splash screen
+  flutter_native_splash: ^2.3.5
+  connectivity_plus: ^6.0.3
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^3.0.0
+
+flutter:
+  generate: true
+
+
+  uses-material-design: true
+  assets:
+    - assets/images/
+    - assets/images/splash/
+    - assets/specialty/
+    - assets/animation/
+  fonts:
+    - family: Tajawal
+      fonts:
+        - asset: assets/fonts/Tajawal-Regular.ttf
+        - asset: assets/fonts/Tajawal-Medium.ttf
+          weight: 300
+        - asset: assets/fonts/Tajawal-Bold.ttf
+          weight: 600
+        - asset: assets/fonts/Tajawal-Black.ttf
+          weight: 900
+
+    - family: SST_Arabic
+      fonts:
+        - asset: assets/fonts/sst_arabic.ttf
