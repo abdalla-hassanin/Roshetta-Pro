@@ -6,7 +6,7 @@ import 'package:roshetta_pro/features/patient/data/models/x_ray_model.dart';
 import 'package:roshetta_pro/features/patient/domain/entities/medical_history_entity.dart';
 import 'package:roshetta_pro/features/patient/domain/entities/prescription_entity.dart';
 import 'package:roshetta_pro/features/patient/domain/entities/x_ray_entity.dart';
-import 'package:roshetta_pro/features/patient_auth/domain/entities/patient_entity.dart';
+import 'package:roshetta_pro/features/auth/domain/entities/patient_entity.dart';
 
 abstract class DoctorRepository {
   Future<PatientEntity> getPatientByMobileNumber(String mobileNumber);

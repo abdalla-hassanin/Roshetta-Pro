@@ -6,7 +6,7 @@ import 'package:iconify_flutter/icons/radix_icons.dart';
 import 'package:roshetta_pro/core/core_cubit/core_cubit.dart';
 import 'package:roshetta_pro/core/routes.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
-import 'package:roshetta_pro/features/patient_auth/presentation/manager/patient_auth_cubit.dart';
+import 'package:roshetta_pro/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_setting_card.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/widgets/my_dialog_warning.dart';
@@ -90,27 +90,30 @@ class PatientSettingsScreen extends StatelessWidget {
               context: context,
               message: context.l10n.signOutFromAccount,
               onYesTap: () {
-                context.read<PatientAuthCubit>().patientSignOut();
+                context.read<AuthCubit>().signOut();
               });
         }
       },
     ];
-    return BlocBuilder<PatientAuthCubit, PatientAuthState>(
-      builder: (context, state) {
-        if (state is PatientSignOutSuccess) {
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is SignOutSuccess) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             Navigator.pushNamedAndRemoveUntil(
-                context, Routes.coreScreen, (route) => false);
+                context, Routes.signInScreen, (route) => false);
           });
-        } else if (state is PatientSignOutError) {
+        } else if (state is SignOutError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error),
-              duration: const Duration(seconds: 3),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 2),
             ),
           );
           Navigator.pop(context);
         }
+      },
+      builder: (context, state) {
 
         return Scaffold(
           appBar: CustomTopBar(title: context.l10n.settings),

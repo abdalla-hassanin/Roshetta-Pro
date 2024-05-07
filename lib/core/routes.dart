@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:roshetta_pro/core/core_screen.dart';
+import 'package:roshetta_pro/features/auth/domain/entities/patient_entity.dart';
+import 'package:roshetta_pro/features/auth/presentation/pages/doctor_sign_up_screen.dart';
+import 'package:roshetta_pro/features/auth/presentation/pages/sign_in_screen.dart';
+import 'package:roshetta_pro/features/auth/presentation/pages/sign_up_screen.dart';
 import 'package:roshetta_pro/features/doctor/presentation/pages/doctor_new_prescription_screen.dart';
 import 'package:roshetta_pro/features/doctor/presentation/pages/doctor_new_x_ray_screen.dart';
 import 'package:roshetta_pro/features/doctor/presentation/pages/doctor_patient_medical_history_screen.dart';
@@ -8,9 +11,7 @@ import 'package:roshetta_pro/features/doctor/presentation/pages/doctor_patient_s
 import 'package:roshetta_pro/features/doctor/presentation/pages/doctor_patient_x_rays_screen.dart';
 import 'package:roshetta_pro/features/doctor/presentation/pages/doctor_screen.dart';
 import 'package:roshetta_pro/features/doctor/presentation/pages/doctor_settings_screen.dart';
-import 'package:roshetta_pro/features/doctor_auth/domain/entities/doctor_entity.dart';
-import 'package:roshetta_pro/features/doctor_auth/presentation/pages/doctor_sign_in_screen.dart';
-import 'package:roshetta_pro/features/doctor_auth/presentation/pages/doctor_sign_up_screen.dart';
+import 'package:roshetta_pro/features/auth/domain/entities/doctor_entity.dart';
 import 'package:roshetta_pro/features/patient/domain/entities/prescription_entity.dart';
 import 'package:roshetta_pro/features/patient/presentation/pages/patient_medical_history_screen.dart';
 import 'package:roshetta_pro/features/patient/presentation/pages/patient_prescription_details_screen.dart';
@@ -18,53 +19,43 @@ import 'package:roshetta_pro/features/patient/presentation/pages/patient_prescri
 import 'package:roshetta_pro/features/patient/presentation/pages/patient_screen.dart';
 import 'package:roshetta_pro/features/patient/presentation/pages/patient_settings_screen.dart';
 import 'package:roshetta_pro/features/patient/presentation/pages/patient_x_rays_screen.dart';
-import 'package:roshetta_pro/features/patient_auth/domain/entities/patient_entity.dart';
-import 'package:roshetta_pro/features/patient_auth/presentation/pages/patient_sign_in_screen.dart';
-import 'package:roshetta_pro/features/patient_auth/presentation/pages/patient_sign_up_screen.dart';
+import 'package:roshetta_pro/features/auth/presentation/pages/patient_sign_up_screen.dart';
 import 'package:roshetta_pro/features/pharmacy/domain/entities/pharmacy_entity.dart';
 import 'package:roshetta_pro/features/pharmacy/domain/entities/prescription_entity.dart'
     as pharmacy;
 import 'package:roshetta_pro/features/pharmacy/presentation/pages/pharmacy_prescription_screen.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/pages/pharmacy_screen.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/pages/pharmacy_settings_screen.dart';
-import 'package:roshetta_pro/features/pharmacy_auth/presentation/pages/pharmacy_sign_in_screen.dart';
-import 'package:roshetta_pro/features/pharmacy_auth/presentation/pages/pharmacy_sign_up_screen.dart';
+import 'package:roshetta_pro/features/auth/presentation/pages/pharmacy_sign_up_screen.dart';
 
 class Routes {
-  static const String coreScreen = 'coreScreen';
-  static const String pharmacySignInScreen = 'pharmacySignInScreen';
+  /// Auth Routes
+  static const String signInScreen = 'signInScreen';
+  static const String signUpScreen = 'signUpScreen';
   static const String pharmacySignUpScreen = 'pharmacySignUpScreen';
+  static const String doctorSignUpScreen = 'doctorSignUpScreen';
+  static const String patientSignUpScreen = 'patientSignUpScreen';
+
+  /// PHARMACY ROUTES
   static const String pharmacyScreen = 'pharmacyScreen';
   static const String pharmacyPrescriptionScreen = 'pharmacyPrescriptionScreen';
   static const String pharmacySettingsScreen = 'pharmacySettingsScreen';
 
-//////////////////////////////////////////////////////////////////////////
-///////////////DOCTOR ROUTES////////////////////////////////////////////
-  static const String doctorSignInScreen = 'doctorSignInScreen';
-  static const String doctorSignUpScreen = 'doctorSignUpScreen';
-
+  /// DOCTOR ROUTES
   static const String doctorScreen = 'doctorScreen';
-
   static const String doctorSettingsScreen = 'doctorSettingsScreen';
   static const String doctorProfileScreen = 'doctorProfileScreen';
   static const String doctorNewPrescriptionScreen =
       'doctorNewPrescriptionScreen';
-
   static const String doctorPatientScreen = 'doctorPatientScreen';
+  static const String doctorPatientPrescriptionsScreen =
+      'doctorPatientPrescriptionsScreen';
+  static const String doctorPatientMedicalHistoryScreen =
+      'doctorPatientMedicalHistoryScreen';
+  static const String doctorPatientXRaysScreen = 'doctorPatientXRaysScreen';
+  static const String doctorNewXRayScreen = 'doctorNewXRayScreen';
 
-  static const String doctorPatientPrescriptionsScreen ='doctorPatientPrescriptionsScreen';
-
-  static const String doctorPatientMedicalHistoryScreen ='doctorPatientMedicalHistoryScreen';
-
-  static const String doctorPatientXRaysScreen ='doctorPatientXRaysScreen';
-
-  static const String doctorNewXRayScreen ='doctorNewXRayScreen';
-
-//////////////////////////////////////////////////////////////////////////
-///////////////PATIENT ROUTES////////////////////////////////////////////
-  static const String patientSignInScreen = 'patientSignInScreen';
-  static const String patientSignUpScreen = 'patientSignUpScreen';
-
+  /// PATIENT ROUTES
   static const String patientScreen = 'patientScreen';
   static const String patientSettingsScreen = 'patientSettingsScreen';
   static const String patientPrescriptionsScreen = 'patientPrescriptionsScreen';
@@ -78,14 +69,19 @@ class Routes {
 class AppRoutes {
   static Route onGenerate(RouteSettings routeSettings) {
     switch (routeSettings.name) {
-      case Routes.coreScreen:
-        return MaterialPageRoute(builder: (context) => const CoreScreen());
-      case Routes.pharmacySignInScreen:
-        return MaterialPageRoute(builder: (context) => PharmacySignInScreen());
+      /// AUTH ROUTES
+      case Routes.signInScreen:
+        return MaterialPageRoute(builder: (context) => SignInScreen());
+      case Routes.signUpScreen:
+        return MaterialPageRoute(builder: (context) => const SignUpScreen());
       case Routes.pharmacySignUpScreen:
-        return MaterialPageRoute(
-            builder: (context) => const PharmacySingUpScreen());
+        return MaterialPageRoute(builder: (context) => PharmacySingUpScreen());
+      case Routes.doctorSignUpScreen:
+        return MaterialPageRoute(builder: (context) => DoctorSingUpScreen());
+      case Routes.patientSignUpScreen:
+        return MaterialPageRoute(builder: (context) => PatientSingUpScreen());
 
+      /// PHARMACY ROUTES
       case Routes.pharmacyScreen:
         PharmacyEntity pharmacy = routeSettings.arguments as PharmacyEntity;
         return MaterialPageRoute(
@@ -100,15 +96,8 @@ class AppRoutes {
       case Routes.pharmacySettingsScreen:
         return MaterialPageRoute(
             builder: (context) => const PharmacySettingsScreen());
-///////////////////////////////////////////////////////////////////////////
-///////////////DOCTOR ROUTES//////////////////////////////////////////////
 
-      case Routes.doctorSignInScreen:
-        return MaterialPageRoute(builder: (context) => DoctorSignInScreen());
-      case Routes.doctorSignUpScreen:
-        return MaterialPageRoute(
-            builder: (context) => const DoctorSingUpScreen());
-
+      /// DOCTOR ROUTES
       case Routes.doctorScreen:
         DoctorEntity doctor = routeSettings.arguments as DoctorEntity;
         return MaterialPageRoute(builder: (context) => DoctorScreen(doctor));
@@ -145,15 +134,8 @@ class AppRoutes {
         String patientId = routeSettings.arguments as String;
         return MaterialPageRoute(
             builder: (context) => DoctorNewXRayScreen(patientId));
-//////////////////////////////////////////////////////////////////////////
-///////////////PATIENT ROUTES////////////////////////////////////////////
 
-      case Routes.patientSignInScreen:
-        return MaterialPageRoute(builder: (context) => PatientSignInScreen());
-      case Routes.patientSignUpScreen:
-        return MaterialPageRoute(
-            builder: (context) => const PatientSingUpScreen());
-
+      /// PATIENT ROUTES
       case Routes.patientScreen:
         PatientEntity patientEntity = routeSettings.arguments as PatientEntity;
 

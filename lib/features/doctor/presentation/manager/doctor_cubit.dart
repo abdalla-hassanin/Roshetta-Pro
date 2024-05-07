@@ -12,7 +12,7 @@ import 'package:roshetta_pro/features/patient/domain/entities/medical_history_en
 import 'package:roshetta_pro/features/patient/domain/entities/prescription_entity.dart';
 import 'package:roshetta_pro/features/patient/domain/entities/x_ray_entity.dart';
 import 'package:roshetta_pro/features/patient/domain/use_cases/patient_use_cases.dart';
-import 'package:roshetta_pro/features/patient_auth/domain/entities/patient_entity.dart';
+import 'package:roshetta_pro/features/auth/domain/entities/patient_entity.dart';
 
 part 'doctor_state.dart';
 

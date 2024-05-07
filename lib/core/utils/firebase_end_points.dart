@@ -10,6 +10,7 @@ class FireBaseEndPoints {
   static const String pathPharmacyUploadImage="users/profileImagesPharmacy";
   static const String pathPatientUploadImage="users/profileImagesPatient";
   static const String pathDoctorUploadImage="users/profileImagesDoctor";
+  static const String pathUploadProfileImage="users/profileImages";
   static const String prescriptions="prescriptions";
   static const String medicalHistory="medicalHistory";
   static const String xrays="xrays";

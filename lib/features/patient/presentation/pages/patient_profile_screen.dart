@@ -6,7 +6,7 @@ import 'package:iconify_flutter/icons/ic.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
-import 'package:roshetta_pro/features/patient_auth/domain/entities/patient_entity.dart';
+import 'package:roshetta_pro/features/auth/domain/entities/patient_entity.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/widgets/my_profile_data_card.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/widgets/my_profile_top_bar.dart';

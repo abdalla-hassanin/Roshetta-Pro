@@ -6,7 +6,7 @@ import 'package:roshetta_pro/core/utils/firebase_end_points.dart';
 import 'package:roshetta_pro/features/patient/data/models/medical_history_model.dart';
 import 'package:roshetta_pro/features/patient/data/models/prescription_model.dart';
 import 'package:roshetta_pro/features/patient/data/models/x_ray_model.dart';
-import 'package:roshetta_pro/features/patient_auth/data/models/patient_model.dart';
+import 'package:roshetta_pro/features/auth/data/models/patient_model.dart';
 
 class DoctorDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;

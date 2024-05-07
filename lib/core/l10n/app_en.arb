@@ -126,5 +126,7 @@
   "drugAmount": "Drug Amount",
   "drugType": "Drug Type",
   "howLong": "How Long",
-  "timeOfUse": "Time Of Use"
+  "timeOfUse": "Time Of Use",
+  "confirmExit": "Confirm Exit",
+  "sureExit": "Are you sure you want to exit?"
 }

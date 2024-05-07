@@ -7,7 +7,7 @@ import 'package:roshetta_pro/core/routes.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/doctor/presentation/manager/doctor_cubit.dart';
 import 'package:roshetta_pro/features/doctor/presentation/pages/doctor_profile_screen.dart';
-import 'package:roshetta_pro/features/doctor_auth/domain/entities/doctor_entity.dart';
+import 'package:roshetta_pro/features/auth/domain/entities/doctor_entity.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_button.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_info_card.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_text_form_field.dart';
