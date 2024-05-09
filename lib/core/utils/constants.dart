@@ -11,17 +11,7 @@ var colorGray94 = const Color(0xFF949494);
 var colorBlueC0 = const Color(0xFF5371C0);
 var colorBlue4C = const Color(0xFF2B394C);
 
-// Future navigateTo(BuildContext context,Widget widget) async {
-//   return await Navigator.push(context, MaterialPageRoute(builder: (context) => widget, ));
-// }
-//
-// void navigateAndKill (context,widget) {
-//   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => widget), (route) => false);
-// }
-//
-// void pop (context) {
-//   Navigator.pop(context);
-// }
+
 Widget imagePreview(String? image){
   return FullScreenWidget(
     child: Center(

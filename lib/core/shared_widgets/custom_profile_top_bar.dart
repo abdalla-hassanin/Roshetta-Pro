@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 
 class CustomProfileTopBar extends StatelessWidget {
@@ -6,7 +7,8 @@ class CustomProfileTopBar extends StatelessWidget {
   final String name;
   final String bio;
 
-  const CustomProfileTopBar({super.key, required this.image, required this.name, required this.bio});
+  const CustomProfileTopBar(
+      {super.key, required this.image, required this.name, required this.bio});
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +19,19 @@ class CustomProfileTopBar extends StatelessWidget {
               padding: const EdgeInsets.only(top: 8, bottom: 8),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0),
-                child: Image.network(
-                  image,
+                child: CachedNetworkImage(
+                  imageUrl: image,
+                  fit: BoxFit.cover,
                   height: MediaQuery.of(context).size.height * 0.2,
                   width: MediaQuery.of(context).size.width * 0.35,
-                  fit: BoxFit.cover,
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      Center(
+                          child: CircularProgressIndicator(
+                              value: downloadProgress.progress)),
+                  errorWidget: (context, url, error) => Image.asset(
+                    'assets/images/no_image.jpg',
+                    fit: BoxFit.cover,
+                  ),
                 ),
               )),
         ),

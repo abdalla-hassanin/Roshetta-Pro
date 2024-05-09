@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:iconify_flutter/iconify_flutter.dart';
 import 'package:iconify_flutter/icons/dashicons.dart';
@@ -32,14 +33,23 @@ class CustomInfoCard extends StatelessWidget {
             const EdgeInsets.only(top: 8.0, bottom: 8, left: 8, right: 4),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
-              child: Image.network(
-                image,
+              child:  CachedNetworkImage(
+                imageUrl: image,
+                fit: BoxFit.cover,
                 height: MediaQuery.of(context).size.height * 0.14,
                 width: MediaQuery.of(context).size.width * 0.25,
-                fit: BoxFit.cover,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress)),
+                errorWidget: (context, url, error) => Image.asset(
+                  'assets/images/no_image.jpg',
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
           ),
+
           Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,6 +119,7 @@ class CustomInfoCard extends StatelessWidget {
                       const Spacer(),
                       InkWell(
                         onTap: () {
+                          //TODO edit
                           Navigator.push(context,MaterialPageRoute(builder: (context) => navigateToWidget));
                         },
                         child: Padding(

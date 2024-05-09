@@ -24,7 +24,7 @@ ThemeData darkTheme() {
       ),
     ),
     // primarySwatch: Colors.blue,
-    scaffoldBackgroundColor: const Color(0x00181818),
+    scaffoldBackgroundColor:colorBlue4C,
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
       contentPadding: const EdgeInsetsDirectional.only(top: 5, start: 30),

@@ -31,6 +31,7 @@ dependencies:
   # for splash screen
   flutter_native_splash: ^2.3.5
   connectivity_plus: ^6.0.3
+  cached_network_image: ^3.3.1
 
 
 dev_dependencies:

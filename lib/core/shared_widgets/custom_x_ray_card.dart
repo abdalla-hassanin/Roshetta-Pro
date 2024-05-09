@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 
 class CustomXRayCard extends StatelessWidget {
@@ -39,12 +41,26 @@ class CustomXRayCard extends StatelessWidget {
           child: Column(
             children: [
               ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(10)),
-                child: imagePreview(
-                  xrayImage,
-                ),
-              ),
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(10)),
+                  child: FullScreenWidget(
+                    child: Center(
+                      child: CachedNetworkImage(
+                        imageUrl: xrayImage,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 350,
+                        progressIndicatorBuilder:
+                            (context, url, downloadProgress) => Center(
+                                child: CircularProgressIndicator(
+                                    value: downloadProgress.progress)),
+                        errorWidget: (context, url, error) => Image.asset(
+                          'assets/images/no_image.jpg',
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  )),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -80,12 +96,21 @@ class CustomXRayCard extends StatelessWidget {
                             backgroundColor: Colors.transparent,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(30),
-                              child: Image.network(
-                                doctorImage,
+                              child: CachedNetworkImage(
+                                imageUrl: doctorImage,
+                                fit: BoxFit.cover,
                                 height:
                                     MediaQuery.of(context).size.height * 0.2,
                                 width: MediaQuery.of(context).size.width * 0.25,
-                                fit: BoxFit.cover,
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) => Center(
+                                        child: CircularProgressIndicator(
+                                            value: downloadProgress.progress)),
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                  'assets/images/no_image.jpg',
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             )),
                         const SizedBox(
