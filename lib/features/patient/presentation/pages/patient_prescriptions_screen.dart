@@ -4,8 +4,8 @@ import 'package:lottie/lottie.dart';
 import 'package:roshetta_pro/core/routes.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/patient/presentation/manager/patient_cubit.dart';
-import 'package:roshetta_pro/features/patient/presentation/widgets/custom_prescription_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_prescription_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar.dart';
 
 class PatientPrescriptionsScreen extends StatelessWidget {
   final String patientId;
@@ -18,19 +18,21 @@ class PatientPrescriptionsScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomTopBar(title: context.l10n.prescriptions),
-      body: BlocBuilder<PatientCubit, PatientState>(
+      body: BlocConsumer<PatientCubit, PatientState>(
+        listener: (context, state) {
+          if (state is GetPatientPrescriptionsError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.error),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+            Navigator.pop(context);
+          }
+        },
         builder: (context, state) {
-          if (state is GetPatientPrescriptionsLoading) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (state is GetPatientPrescriptionsError) {
-            //TODO: navigate back and show snack bar with error
-            // Navigator.pop(context);
-            return Center(
-              child: Text(state.error),
-            );
-          } else if (state is GetPatientPrescriptionsSuccess) {
+          if (state is GetPatientPrescriptionsSuccess) {
             final prescriptions = state.prescriptions;
             if (prescriptions.isEmpty) {
               return Center(
@@ -58,8 +60,9 @@ class PatientPrescriptionsScreen extends StatelessWidget {
               ),
             );
           } else {
-            Navigator.pop(context);
-            return Container();
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
       ),

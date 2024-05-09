@@ -121,3 +121,11 @@ class XRayUploadImageToStorageError extends DoctorState {
 
   XRayUploadImageToStorageError(this.error);
 }
+class EmptyPickedImage extends DoctorState {}
+class PickImageSuccess extends DoctorState {}
+
+class PickImageError extends DoctorState {
+  final String error;
+
+  PickImageError(this.error);
+}

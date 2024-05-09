@@ -6,8 +6,8 @@ import 'package:lottie/lottie.dart';
 import 'package:roshetta_pro/core/routes.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/doctor/presentation/manager/doctor_cubit.dart';
-import 'package:roshetta_pro/features/patient/presentation/widgets/custom_x_ray_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_x_ray_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar.dart';
 
 class DoctorPatientXRaysScreen extends StatelessWidget {
   final String patientId;
@@ -19,27 +19,21 @@ class DoctorPatientXRaysScreen extends StatelessWidget {
     context.read<DoctorCubit>().getPatientXRays(patientId);
     return Scaffold(
         appBar: CustomTopBar(title: context.l10n.xRaysAnalysis),
-        body: BlocBuilder<DoctorCubit, DoctorState>(
-          builder: (context, state) {
-            if (state is GetPatientXRaysLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
+        body: BlocConsumer<DoctorCubit, DoctorState>(
+          listener: (context, state) {
+            if (state is GetPatientXRaysError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                  duration: const Duration(seconds: 2),
+                ),
               );
-            } else if (state is GetPatientXRaysError) {
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.error),
-                    backgroundColor: Colors.red,
-                    duration: const Duration(seconds: 3),
-                  ),
-                );
-              });
               Navigator.pop(context);
-              return Center(
-                child: Text(state.error),
-              );
-            } else if (state is GetPatientXRaysSuccess) {
+            }
+          },
+          builder: (context, state) {
+            if (state is GetPatientXRaysSuccess) {
               final xRays = state.patientXRays;
 
               if (xRays.isEmpty) {
@@ -64,8 +58,10 @@ class DoctorPatientXRaysScreen extends StatelessWidget {
                         ),
                     itemCount: xRays.length),
               );
-            }
-            return Container();
+            }else{
+            return const Center(
+              child: CircularProgressIndicator(),
+            );}
           },
         ),
         floatingActionButton: FloatingActionButton.extended(

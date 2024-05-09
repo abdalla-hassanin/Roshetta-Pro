@@ -49,6 +49,10 @@ class AuthCubit extends Cubit<AuthState> {
   }
 
   File? pickedImage;
+  void emptyPickedImage()  {
+    pickedImage = null;
+    emit(EmptyPickedImage());
+  }
 
   Future<void> pickImage() async {
     final picker = ImagePicker();

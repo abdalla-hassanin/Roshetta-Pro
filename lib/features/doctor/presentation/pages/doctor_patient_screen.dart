@@ -3,8 +3,9 @@ import 'package:roshetta_pro/core/routes.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/patient/presentation/pages/patient_profile_screen.dart';
 import 'package:roshetta_pro/features/auth/domain/entities/patient_entity.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_info_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_alert_dialog.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_info_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar.dart';
 
 class DoctorPatientScreen extends StatelessWidget {
   final PatientEntity patientEntity;
@@ -13,59 +14,84 @@ class DoctorPatientScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: CustomTopBar(title: context.l10n.patientProfile),
-      body: Column(
-        children: [
-          CustomInfoCard(
-              image: patientEntity.imageUrl,
-              name: patientEntity.name,
-              email: patientEntity.email,
-              mobilePhone: patientEntity.mobileNumber,
-              navigateToWidget: PatientProfileScreen(patientEntity)),
-          Expanded(
-            child: GridView(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                childAspectRatio: 2 / 2.5,
-                crossAxisCount: 2,
-                mainAxisSpacing: 40.0,
-                crossAxisSpacing: 40.0,
-              ),
-              padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
-              children: [
-                _buildCard(
-                    title: context.l10n.prescriptions,
-                    icon: 'assets/images/roshetta.png',
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.doctorPatientPrescriptionsScreen,
-                          arguments: patientEntity.uId);
-                    }),
-                _buildCard(
-                  title: context.l10n.alerts,
-                  icon: 'assets/images/alarm.png',
-                  onTap: null,
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          return;
+        }
+        final bool shouldPop =await customAlertDialog(
+            context: context,
+            message: context.l10n.exitPatientProfile,
+            onYesTap: (){
+              Navigator.of(context).pop(true);
+            }) ?? false;
+        if (shouldPop) {
+          Navigator.of(context).pop();
+        }
+      },
+      child: Scaffold(
+        appBar: CustomTopBar(title: context.l10n.patientProfile),
+        body: Column(
+          children: [
+            CustomInfoCard(
+                image: patientEntity.imageUrl,
+                name: patientEntity.name,
+                email: patientEntity.email,
+                mobilePhone: patientEntity.mobileNumber,
+                navigateToWidget: PatientProfileScreen(patientEntity)),
+            Expanded(
+              child: GridView(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  childAspectRatio: 2 / 2.5,
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 40.0,
+                  crossAxisSpacing: 40.0,
                 ),
-                _buildCard(
-                    title: context.l10n.xRaysAnalysis,
-                    icon: 'assets/images/x_rays.png',
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.doctorPatientXRaysScreen,
-                          arguments: patientEntity.uId);
-                    }),
-                _buildCard(
-                    title: context.l10n.medicalHistory,
-                    icon: 'assets/images/medical_history.png',
-                    onTap: () {
-                      Navigator.pushNamed(
-                          context, Routes.doctorPatientMedicalHistoryScreen,
-                          arguments: patientEntity.uId);
-                    }),
-              ],
-            ),
-          )
-        ],
+                padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
+                children: [
+                  _buildCard(
+                      title: context.l10n.prescriptions,
+                      icon: 'assets/images/roshetta.png',
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, Routes.doctorPatientPrescriptionsScreen,
+                            arguments: patientEntity.uId);
+                      }),
+                  _buildCard(
+                    title: context.l10n.alerts,
+                    icon: 'assets/images/alarm.png',
+                    onTap: (){
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(context.l10n.soon),
+                          backgroundColor: colorBlueC0,
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                  ),
+                  _buildCard(
+                      title: context.l10n.xRaysAnalysis,
+                      icon: 'assets/images/x_rays.png',
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, Routes.doctorPatientXRaysScreen,
+                            arguments: patientEntity.uId);
+                      }),
+                  _buildCard(
+                      title: context.l10n.medicalHistory,
+                      icon: 'assets/images/medical_history.png',
+                      onTap: () {
+                        Navigator.pushNamed(
+                            context, Routes.doctorPatientMedicalHistoryScreen,
+                            arguments: patientEntity.uId);
+                      }),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

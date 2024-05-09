@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/patient/domain/entities/prescription_entity.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_drug_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_info_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_drug_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_info_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar.dart';
 
 class PatientPrescriptionDetailsScreen extends StatelessWidget {
   final PrescriptionEntity prescription;

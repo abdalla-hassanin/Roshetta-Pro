@@ -7,10 +7,9 @@ import 'package:roshetta_pro/core/core_cubit/core_cubit.dart';
 import 'package:roshetta_pro/core/routes.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/auth/presentation/manager/auth_cubit.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_setting_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/my_dialog_warning.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_setting_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_alert_dialog.dart';
 
 class DoctorSettingsScreen extends StatelessWidget {
   const DoctorSettingsScreen({super.key});
@@ -26,7 +25,8 @@ class DoctorSettingsScreen extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(context.l10n.soon),
-              duration: const Duration(seconds: 3),
+              backgroundColor: colorBlueC0,
+              duration: const Duration(seconds: 2),
             ),
           );
         }
@@ -36,7 +36,7 @@ class DoctorSettingsScreen extends StatelessWidget {
         'icon': Ic.outline_language,
         'description': context.l10n.languageControl,
         'onTap': () {
-          myDialogWarning(
+          customAlertDialog(
               context: context,
               message: context.l10n.changeLanguage,
               onYesTap: () async {
@@ -50,7 +50,7 @@ class DoctorSettingsScreen extends StatelessWidget {
         'icon': Ic.baseline_light_mode,
         'description': context.l10n.lightingControl,
         'onTap': () {
-          myDialogWarning(
+          customAlertDialog(
               context: context,
               message: context.l10n.lightingControl,
               onYesTap: () async {
@@ -67,7 +67,8 @@ class DoctorSettingsScreen extends StatelessWidget {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(context.l10n.soon),
-              duration: const Duration(seconds: 3),
+              backgroundColor: colorBlueC0,
+              duration: const Duration(seconds: 2),
             ),
           );
         }
@@ -77,8 +78,13 @@ class DoctorSettingsScreen extends StatelessWidget {
         'icon': Ion.information,
         'description': context.l10n.infoAboutUs,
         'onTap': () {
-          launchUrl(Uri(
-              path: "https://www.linkedin.com/in/abdalla-hassanin-646933221/"));
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(context.l10n.soon),
+              backgroundColor: colorBlueC0,
+              duration: const Duration(seconds: 2),
+            ),
+          );
         }
       },
       {
@@ -86,7 +92,7 @@ class DoctorSettingsScreen extends StatelessWidget {
         'icon': RadixIcons.exit,
         'description': context.l10n.signOut,
         'onTap': () {
-          myDialogWarning(
+          customAlertDialog(
               context: context,
               message: context.l10n.signOutFromAccount,
               onYesTap: () {
@@ -95,14 +101,9 @@ class DoctorSettingsScreen extends StatelessWidget {
         }
       },
     ];
-    return BlocBuilder<AuthCubit, AuthState>(
-      builder: (context, state) {
-        if (state is SignOutSuccess) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pushNamedAndRemoveUntil(
-                context, Routes.signInScreen, (route) => false);
-          });
-        } else if (state is SignOutError) {
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is SignOutError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.error),
@@ -111,8 +112,12 @@ class DoctorSettingsScreen extends StatelessWidget {
             ),
           );
           Navigator.pop(context);
+        } else if (state is SignOutSuccess) {
+          Navigator.pushNamedAndRemoveUntil(
+              context, Routes.signInScreen, (route) => false);
         }
-
+      },
+      builder: (context, state) {
         return Scaffold(
           appBar: CustomTopBar(title: context.l10n.settings),
           body: SingleChildScrollView(

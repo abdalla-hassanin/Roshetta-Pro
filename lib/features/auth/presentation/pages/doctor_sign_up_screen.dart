@@ -8,14 +8,15 @@ import 'package:iconify_flutter/icons/ic.dart';
 import 'package:iconify_flutter/icons/ion.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:roshetta_pro/core/routes.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_alert_dialog.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_button.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_text_form_field.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/core/utils/firebase_end_points.dart';
 import 'package:roshetta_pro/features/auth/domain/entities/doctor_sign_up_params.dart';
 import 'package:roshetta_pro/features/auth/presentation/manager/auth_cubit.dart';
 import 'package:roshetta_pro/features/auth/presentation/widgets/custom_speciality_drop_down_field.dart';
 import 'package:roshetta_pro/features/auth/presentation/widgets/doctors_specialty_list.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_button.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_text_form_field.dart';
 
 class DoctorSingUpScreen extends StatelessWidget {
   DoctorSingUpScreen({super.key});
@@ -42,8 +43,22 @@ class DoctorSingUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (bool didPop) {
-        _popDialog(context);
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          return;
+        }
+        final bool shouldPop = await customAlertDialog(
+                context: context,
+                message: context.l10n.sureExit,
+                onYesTap: () {
+                  Navigator.of(context).pop(true);
+                  context.read<AuthCubit>().emptyPickedImage();
+                  context.read<AuthCubit>().doctorChangeSpecializationValue({});
+                }) ??
+            false;
+        if (shouldPop) {
+          Navigator.of(context).pop();
+        }
       },
       child: Scaffold(
         appBar: AppBar(
@@ -201,34 +216,6 @@ class DoctorSingUpScreen extends StatelessWidget {
     );
   }
 
-  void _popDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.l10n.confirmExit),
-        content: Text(context.l10n.sureExit),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(context.l10n.no),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                  Routes.signInScreen, (route) => false);
-              context.read<AuthCubit>().pickedImage = null;
-              context.read<AuthCubit>().specializationValue.clear();
-            },
-            child: Text(context.l10n.yes),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildCreateAccountButton(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
@@ -276,6 +263,8 @@ class DoctorSingUpScreen extends StatelessWidget {
               duration: const Duration(seconds: 2),
             ),
           );
+          context.read<AuthCubit>().emptyPickedImage();
+          context.read<AuthCubit>().doctorChangeSpecializationValue({});
         }
       },
       builder: (context, state) {

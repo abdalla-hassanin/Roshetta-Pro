@@ -5,15 +5,14 @@ import 'package:iconify_flutter/icons/ic.dart';
 import 'package:iconify_flutter/icons/majesticons.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:roshetta_pro/core/routes.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_button.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_info_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_text_form_field.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar_with_action.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/pharmacy/domain/entities/pharmacy_entity.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/manager/pharmacy_cubit.dart';
 import 'package:roshetta_pro/features/pharmacy/presentation/pages/pharmacy_profile_screen.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_button.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_info_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_text_form_field.dart';
-
-import '../widgets/custom_top_bar_with_action.dart';
 
 class PharmacyScreen extends StatelessWidget {
   final PharmacyEntity pharmacyEntity;
@@ -102,32 +101,30 @@ class PharmacyScreen extends StatelessWidget {
                       const SizedBox(
                         height: 30,
                       ),
-                      BlocBuilder<PharmacyCubit, PharmacyState>(
+                      BlocConsumer<PharmacyCubit, PharmacyState>(
+                        listener: (context, state) {
+                          if (state
+                              is GetPrescriptionByUserPhoneAndPrescriptionIdError) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(state.error),
+                                backgroundColor: Colors.red,
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          } else if (state
+                              is GetPrescriptionByUserPhoneAndPrescriptionIdSuccess) {
+                            Navigator.pushNamed(
+                                context, Routes.pharmacyPrescriptionScreen,
+                                arguments: state.prescription);
+                            _formKey.currentState!.reset();
+                          }
+                        },
                         builder: (context, state) {
                           if (state
                               is GetPrescriptionByUserPhoneAndPrescriptionIdLoading) {
                             return const Center(
                                 child: CircularProgressIndicator());
-                          } else if (state
-                              is GetPrescriptionByUserPhoneAndPrescriptionIdError) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(state.error),
-                                  duration: const Duration(seconds: 3),
-                                ),
-                              );
-                            });
-                          }
-                          if (state
-                              is GetPrescriptionByUserPhoneAndPrescriptionIdSuccess) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.pushNamed(
-                                  context, Routes.pharmacyPrescriptionScreen,
-                                  arguments: state.prescription);
-                              _formKey.currentState!.reset();
-                            })  ;
-
                           }
                           return CustomButton(
                             text: context.l10n.login,

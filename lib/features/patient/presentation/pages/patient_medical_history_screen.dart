@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/patient/presentation/manager/patient_cubit.dart';
-import 'package:roshetta_pro/features/patient/presentation/widgets/custom_medical_history_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_medical_history_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar.dart';
 
 class PatientMedicalHistoryScreen extends StatelessWidget {
   final String patientId;
@@ -16,19 +16,21 @@ class PatientMedicalHistoryScreen extends StatelessWidget {
     context.read<PatientCubit>().getPatientMedicalHistory(patientId);
     return Scaffold(
         appBar: CustomTopBar(title: context.l10n.medicalHistory),
-        body: BlocBuilder<PatientCubit, PatientState>(
+        body: BlocConsumer<PatientCubit, PatientState>(
+          listener: (context, state) {
+            if (state is GetPatientMedicalHistoryError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.error),
+                  backgroundColor: Colors.red,
+                  duration: const Duration(seconds: 2),
+                ),
+              );
+              Navigator.pop(context);
+            }
+          },
           builder: (context, state) {
-            if (state is GetPatientMedicalHistoryLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is GetPatientMedicalHistoryError) {
-              //TODO: navigate back and show snack bar with error
-              // Navigator.pop(context);
-              return Center(
-                child: Text(state.error.toString()),
-              );
-            } else if (state is GetPatientMedicalHistorySuccess) {
+            if (state is GetPatientMedicalHistorySuccess) {
               final medicalHistory = state.medicalHistory;
 
               if (medicalHistory.isEmpty) {
@@ -52,8 +54,9 @@ class PatientMedicalHistoryScreen extends StatelessWidget {
                     itemCount: medicalHistory.length),
               );
             } else {
-              Navigator.pop(context);
-              return Container();
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
             }
           },
         ));

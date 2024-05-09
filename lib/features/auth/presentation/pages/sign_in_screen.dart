@@ -6,11 +6,11 @@ import 'package:iconify_flutter/icons/ic.dart';
 import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:lottie/lottie.dart';
 import 'package:roshetta_pro/core/routes.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_button.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_text_form_field.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/core/utils/firebase_end_points.dart';
 import 'package:roshetta_pro/features/auth/presentation/manager/auth_cubit.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_button.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_text_form_field.dart';
 
 class SignInScreen extends StatelessWidget {
   SignInScreen({super.key});

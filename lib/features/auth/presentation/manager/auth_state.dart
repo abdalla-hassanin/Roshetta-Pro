@@ -46,6 +46,8 @@ class ForgotPasswordError extends AuthState {
   ForgotPasswordError(this.error);
 }
 
+class EmptyPickedImage extends AuthState {}
+
 class PickImageSuccess extends AuthState {}
 
 class PickImageError extends AuthState {

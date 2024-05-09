@@ -5,8 +5,8 @@ import 'package:roshetta_pro/core/routes.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/patient/presentation/pages/patient_profile_screen.dart';
 import 'package:roshetta_pro/features/auth/domain/entities/patient_entity.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_info_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar_with_action.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_info_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar_with_action.dart';
 
 class PatientScreen extends StatelessWidget {
   final PatientEntity patientEntity;
@@ -53,7 +53,15 @@ class PatientScreen extends StatelessWidget {
                 _buildCard(
                   title: context.l10n.alerts,
                   icon: 'assets/images/alarm.png',
-                  onTap: null,
+                  onTap:(){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(context.l10n.soon),
+                        backgroundColor: colorBlueC0,
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  }
                 ),
                 _buildCard(
                     title: context.l10n.xRaysAnalysis,

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:roshetta_pro/core/dependency_injection.dart';
 import 'package:roshetta_pro/features/doctor/domain/use_cases/doctor_use_cases.dart';
 import 'package:roshetta_pro/features/patient/data/models/drug_model.dart';
@@ -25,6 +26,27 @@ class DoctorCubit extends Cubit<DoctorState> {
     drugs.add(drug);
     emit(AddDrugToListSuccess(drugs));
   }
+
+  File? pickedImage;
+
+  void emptyPickedImage()  {
+    pickedImage = null;
+    emit(EmptyPickedImage());
+  }
+
+  Future<void> pickImage() async {
+    final picker = ImagePicker();
+    XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedImage != null) {
+      // If image is picked, update the state
+      this.pickedImage = File(pickedImage.path);
+      emit(PickImageSuccess());
+    } else {
+      emit(PickImageError('No image selected.'));
+    }
+  }
+
 
   Future<void> getPatientByMobileNumber(String mobileNumber) async {
     try {

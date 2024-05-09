@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/pharmacy/domain/entities/prescription_entity.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_drug_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/my_dialog_warning.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_alert_dialog.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_drug_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar.dart';
 
 class PharmacyPrescriptionScreen extends StatelessWidget {
   final PrescriptionEntity prescription;
@@ -12,15 +12,21 @@ class PharmacyPrescriptionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        final shouldPop = await myDialogWarning(
-            context: context,
-            message: context.l10n.exitPatientProfile,
-            onYesTap: () {
-              Navigator.pop(context, true);
-            });
-        return shouldPop ?? false;
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (bool didPop) async {
+        if (didPop) {
+          return;
+        }
+        final bool shouldPop = await customAlertDialog(
+                context: context,
+                message: context.l10n.exitPatientProfile,
+                onYesTap: () {
+                  Navigator.of(context).pop(true);
+                }) ?? false;
+        if (shouldPop) {
+          Navigator.of(context).pop();
+        }
       },
       child: Scaffold(
           appBar: CustomTopBar(
@@ -73,4 +79,5 @@ class PharmacyPrescriptionScreen extends StatelessWidget {
           )),
     );
   }
+
 }

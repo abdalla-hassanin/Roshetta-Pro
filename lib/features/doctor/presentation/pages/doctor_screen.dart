@@ -8,10 +8,10 @@ import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/doctor/presentation/manager/doctor_cubit.dart';
 import 'package:roshetta_pro/features/doctor/presentation/pages/doctor_profile_screen.dart';
 import 'package:roshetta_pro/features/auth/domain/entities/doctor_entity.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_button.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_info_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_text_form_field.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar_with_action.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_button.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_info_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_text_form_field.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar_with_action.dart';
 
 class DoctorScreen extends StatelessWidget {
   final DoctorEntity doctorEntity;
@@ -88,29 +88,27 @@ class DoctorScreen extends StatelessWidget {
                       const SizedBox(
                         height: 30,
                       ),
-                      BlocBuilder<DoctorCubit, DoctorState>(
+                      BlocConsumer<DoctorCubit, DoctorState>(
+                        listener: (context, state) {
+                          if (state is GetPatientByMobileNumberError) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(state.error),
+                                backgroundColor: Colors.red,
+                                duration: const Duration(seconds: 2),
+                              ),
+                            );
+                          } else if (state is GetPatientByMobileNumberSuccess) {
+                            Navigator.pushNamed(
+                                context, Routes.doctorPatientScreen,
+                                arguments: state.patientEntity);
+                            _formKey.currentState!.reset();
+                          }
+                        },
                         builder: (context, state) {
                           if (state is GetPatientByMobileNumberLoading) {
                             return const Center(
                                 child: CircularProgressIndicator());
-                          } else if (state is GetPatientByMobileNumberError) {
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(state.error),
-                                  duration: const Duration(seconds: 3),
-                                ),
-                              );
-                            });
-                          }
-                          if (state is GetPatientByMobileNumberSuccess) {
-                            // TODO: navigate to patient Details screen
-                            WidgetsBinding.instance.addPostFrameCallback((_) {
-                              Navigator.pushNamed(
-                                  context, Routes.doctorPatientScreen,
-                                  arguments: state.patientEntity);
-                              _formKey.currentState!.reset();
-                            });
                           }
                           return CustomButton(
                             text: context.l10n.login,

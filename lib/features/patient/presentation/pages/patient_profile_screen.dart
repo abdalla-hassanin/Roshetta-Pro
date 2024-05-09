@@ -7,9 +7,9 @@ import 'package:iconify_flutter/icons/mdi.dart';
 import 'package:iconify_flutter/icons/ph.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/auth/domain/entities/patient_entity.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/my_profile_data_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/my_profile_top_bar.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_profile_data_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_profile_top_bar.dart';
 
 class PatientProfileScreen extends StatelessWidget {
   final PatientEntity patientEntity;
@@ -69,15 +69,14 @@ class PatientProfileScreen extends StatelessWidget {
           padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              myProfileTopBar(
-                  context: context,
+              CustomProfileTopBar(
                   image: patientEntity.imageUrl,
                   name: patientEntity.name,
                   bio: patientEntity.bio),
               ListView.separated(
                 physics: const NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
-                itemBuilder: (context, index) => myProfileDataCard(
+                itemBuilder: (context, index) => CustomProfileDataCard(
                     title: model1[index]['title'],
                     icon: model1[index]['icon'],
                     value: model1[index]['value']),

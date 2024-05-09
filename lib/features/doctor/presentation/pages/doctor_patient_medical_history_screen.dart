@@ -7,9 +7,9 @@ import 'package:lottie/lottie.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 import 'package:roshetta_pro/features/doctor/presentation/manager/doctor_cubit.dart';
 import 'package:roshetta_pro/features/patient/data/models/medical_history_model.dart';
-import 'package:roshetta_pro/features/patient/presentation/widgets/custom_medical_history_card.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_text_form_field.dart';
-import 'package:roshetta_pro/features/pharmacy/presentation/widgets/custom_top_bar.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_medical_history_card.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_text_form_field.dart';
+import 'package:roshetta_pro/core/shared_widgets/custom_top_bar.dart';
 
 class DoctorPatientMedicalHistoryScreen extends StatelessWidget {
   final String patientId;
@@ -21,57 +21,57 @@ class DoctorPatientMedicalHistoryScreen extends StatelessWidget {
     context.read<DoctorCubit>().getPatientMedicalHistory(patientId);
     return Scaffold(
         appBar: CustomTopBar(title: context.l10n.medicalHistory),
-        body: BlocBuilder<DoctorCubit, DoctorState>(
-          builder: (context, state) {
-            if (state is GetPatientMedicalHistoryLoading ||
-                state is AddNewMedicalHistoryLoading) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (state is GetPatientMedicalHistoryError ||
-                state is AddNewMedicalHistoryError) {
-              //TODO: navigate back and show snack bar with error
-              // Navigator.pop(context);
-              String? errorMsg;
-              if (state is GetPatientMedicalHistoryError) {
-                errorMsg = state.error;
-              } else if (state is AddNewMedicalHistoryError) {
-                errorMsg = state.error;
-              }
-              return Center(
-                child: Text(errorMsg.toString()),
-              );
-            } else if (state is AddNewMedicalHistorySuccess) {
-              context.read<DoctorCubit>().getPatientMedicalHistory(patientId);
-            } else if (state is GetPatientMedicalHistorySuccess) {
-              final medicalHistory = state.patientMedicalHistory;
+        body:
+            BlocConsumer<DoctorCubit, DoctorState>(listener: (context, state) {
+          if (state is GetPatientMedicalHistoryError ||
+              state is AddNewMedicalHistoryError) {
+            String? errorMsg;
+            if (state is GetPatientMedicalHistoryError) {
+              errorMsg = state.error;
+            } else if (state is AddNewMedicalHistoryError) {
+              errorMsg = state.error;
+            }
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(errorMsg!),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+            Navigator.pop(context);
+          } else if (state is AddNewMedicalHistorySuccess) {
+            context.read<DoctorCubit>().getPatientMedicalHistory(patientId);
+          }
+        }, builder: (context, state) {
+          if (state is GetPatientMedicalHistorySuccess) {
+            final medicalHistory = state.patientMedicalHistory;
 
-              if (medicalHistory.isEmpty) {
-                return Center(
-                  child: Lottie.asset('assets/animation/no-data-preview.json'),
-                );
-              }
-              return SingleChildScrollView(
-                child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) => CustomMedicalHistoryCard(
-                          image: medicalHistory[index].doctorImg,
-                          doctorName: medicalHistory[index].doctorName,
-                          date: medicalHistory[index].date,
-                          bodyText: medicalHistory[index].body,
-                        ),
-                    separatorBuilder: (context, index) => const SizedBox(
-                          height: 5,
-                        ),
-                    itemCount: medicalHistory.length),
+            if (medicalHistory.isEmpty) {
+              return Center(
+                child: Lottie.asset('assets/animation/no-data-preview.json'),
               );
             }
-
-            Navigator.pop(context);
-            return Container();
-          },
-        ),
+            return SingleChildScrollView(
+              child: ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemBuilder: (context, index) => CustomMedicalHistoryCard(
+                        image: medicalHistory[index].doctorImg,
+                        doctorName: medicalHistory[index].doctorName,
+                        date: medicalHistory[index].date,
+                        bodyText: medicalHistory[index].body,
+                      ),
+                  separatorBuilder: (context, index) => const SizedBox(
+                        height: 5,
+                      ),
+                  itemCount: medicalHistory.length),
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        }),
         floatingActionButton: FloatingActionButton.extended(
           hoverElevation: 50,
           backgroundColor: colorBlue4C,
@@ -106,27 +106,15 @@ class DoctorPatientMedicalHistoryScreen extends StatelessWidget {
   }
 }
 
-class MedicalHistoryDialog extends StatefulWidget {
+class MedicalHistoryDialog extends StatelessWidget {
   final String patientId;
 
-  const MedicalHistoryDialog(this.patientId, {super.key});
+  MedicalHistoryDialog(this.patientId, {super.key});
 
-  @override
-  State<MedicalHistoryDialog> createState() => _MedicalHistoryDialogState();
-}
-
-class _MedicalHistoryDialogState extends State<MedicalHistoryDialog> {
   final TextEditingController medicalHistoryController =
       TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    medicalHistoryController.dispose();
-    _formKey.currentState?.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -179,7 +167,7 @@ class _MedicalHistoryDialogState extends State<MedicalHistoryDialog> {
                   onTap: () {
                     if (_formKey.currentState!.validate()) {
                       context.read<DoctorCubit>().addNewMedicalHistory(
-                          widget.patientId,
+                          patientId,
                           MedicalHistoryModel(
                             doctorId: 'doctorId',
                             date: getDate(),
@@ -188,6 +176,7 @@ class _MedicalHistoryDialogState extends State<MedicalHistoryDialog> {
                             doctorImg: 'doctorImg',
                             dateTime: Timestamp.now(),
                           ));
+                      Navigator.pop(context);
                     }
                   },
                   child: Container(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:roshetta_pro/core/utils/constants.dart';
 
-myDialogWarning(
+Future<bool?> customAlertDialog(
     {required BuildContext context,
     required String message,
     required VoidCallback onYesTap}) {
-  return showDialog(
+  return showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
             backgroundColor: colorGrayF9,
@@ -32,7 +32,7 @@ myDialogWarning(
                   children: [
                     Expanded(
                       child: InkWell(
-                        onTap: () => Navigator.pop(context, false),
+                        onTap: () => Navigator.of(context).pop(false),
                         child: Container(
                           padding: const EdgeInsetsDirectional.only(
                               top: 20.0, bottom: 20.0),
